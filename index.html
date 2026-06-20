@@ -45,6 +45,7 @@
       <div class="unit"><div class="n" id="cd-m">--</div><div class="u">Minutes</div></div>
       <div class="unit"><div class="n" id="cd-s">--</div><div class="u">Seconds</div></div>
     </div>
+    <div class="nowbar" id="nowbar" style="display:none;"><span class="liveDot"></span><span id="nowtext"></span></div>
   </div>
 </section>
 
@@ -201,6 +202,48 @@ document.body.classList.add('js');
     entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
   }, {threshold:0.12});
   els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+
+<script>
+(function(){
+  var bar = document.getElementById('nowbar'), txt = document.getElementById('nowtext');
+  if (!bar) return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fri = new Date('2026-06-26T00:00:00-05:00'), sat = new Date('2026-06-27T00:00:00-05:00'),
+      sun = new Date('2026-06-28T00:00:00-05:00'), mon = new Date('2026-06-29T00:00:00-05:00'),
+      arrive = new Date('2026-06-26T11:25:00-05:00');
+  function phase(){
+    var n = new Date();
+    if (n < fri) return null;                 // before the trip, the countdown carries it
+    if (n < sat) return 'Day one in Chicago. Arrivals and the welcome dinner. 🛬';
+    if (n < sun) return 'Adventure day. Pokémon fossils, then Minecraft villagers. 🦖⛏️';
+    if (n < mon) return "Pride Sunday. Eric's first parade, Free to Be Proud. 🏳️‍🌈";
+    return 'Wiscago, in the books. On to the Dragon House. 🐉';
+  }
+  function upd(){ var p = phase(); if (p){ txt.textContent = 'Right now: ' + p; bar.style.display = 'inline-flex'; } else { bar.style.display = 'none'; } }
+  upd(); setInterval(upd, 30000);
+
+  if (!reduce) {
+    var fired = false;
+    setInterval(function(){
+      if (fired) return; var d = arrive - new Date();
+      if (d <= 0 && d > -3600000){ fired = true; celebrate(); }
+    }, 1000);
+  }
+  function celebrate(){
+    var c = document.createElement('canvas'); c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:200';
+    document.body.appendChild(c); var x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+    var cols = ['#E63946','#E8A93E','#7BA08A','#5BB0D6','#B83A6B','#7B1F2F'], P = [];
+    for (var i = 0; i < (innerWidth < 600 ? 70 : 140); i++)
+      P.push({ x: innerWidth/2, y: innerHeight*0.3, vx:(Math.random()-.5)*12, vy:Math.random()*-14-2, c:cols[i%cols.length], r:Math.random()*6+3, a:1 });
+    (function f(){
+      x.clearRect(0,0,c.width,c.height); var live = false;
+      P.forEach(function(p){ p.vy += .4; p.x += p.vx; p.y += p.vy; p.a -= .012;
+        if (p.a > 0){ live = true; x.globalAlpha = Math.max(p.a,0); x.fillStyle = p.c; x.fillRect(p.x,p.y,p.r,p.r); } });
+      live ? requestAnimationFrame(f) : c.remove();
+    })();
+  }
 })();
 </script>
 

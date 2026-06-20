@@ -646,3 +646,42 @@ nav.primary a:active { transform: translateY(1px); }
 
 /* No layout shift on numbers */
 .bigstat .num, .countdown .n { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   EXPERIENTIAL BUILD (2026-06-20) — run-of-show, live status,
+   adventure badges, count-up. From the stack-ranked doc.
+   ============================================================ */
+.ros { display:grid; gap:12px; margin-top:28px; }
+.ros details { background:var(--paper); border-radius:14px; border-left:4px solid var(--gold);
+  box-shadow:0 4px 16px rgba(31,26,36,0.06); overflow:hidden; }
+.ros details[open]{ box-shadow:0 12px 32px rgba(31,26,36,0.12); }
+.ros summary { list-style:none; cursor:pointer; padding:18px 22px; display:flex; gap:16px; align-items:center; }
+.ros summary::-webkit-details-marker{ display:none; }
+.ros summary .time { font-family:"Cormorant Garamond",Georgia,serif; font-size:26px; color:var(--burgundy);
+  font-weight:600; min-width:74px; line-height:1; }
+.ros summary .what { font-weight:700; font-size:17px; }
+.ros summary .where { font-size:13px; color:rgba(31,26,36,0.6); margin-top:2px; display:block; }
+.ros summary .chev { margin-left:auto; transition:transform .25s cubic-bezier(.16,1,.3,1); color:var(--burgundy); font-size:22px; }
+.ros details[open] summary .chev { transform:rotate(90deg); }
+.ros .ros-body { padding:0 22px 20px 22px; }
+.ros .ros-row { display:grid; grid-template-columns:96px 1fr; gap:6px 14px; font-size:14.5px; padding:9px 0; border-top:1px dashed var(--rule); }
+.ros .ros-row .k { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--burgundy); font-weight:700; padding-top:3px; }
+.ros .producer { background:rgba(232,169,62,0.14); border-radius:10px; padding:12px 14px; margin-top:12px; font-size:14px; line-height:1.5; }
+.ros .producer b { color:var(--burgundy); }
+@media(max-width:560px){ .ros summary{ flex-wrap:wrap; } .ros .ros-row{ grid-template-columns:1fr; gap:2px; } }
+
+.nowbar { display:inline-flex; align-items:center; gap:10px; margin-top:22px; background:var(--paper);
+  border-radius:999px; padding:9px 18px; font-weight:700; font-size:14px; box-shadow:0 4px 16px rgba(31,26,36,0.08); }
+.nowbar .liveDot{ width:9px; height:9px; border-radius:50%; background:var(--sage); }
+@media (prefers-reduced-motion: no-preference){ .nowbar .liveDot{ animation:pulseDot 2s infinite; } }
+@keyframes pulseDot{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.8)} }
+
+.badges { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+.badge-btn { appearance:none; border:2px dashed var(--burgundy); background:transparent; color:var(--burgundy);
+  border-radius:16px; padding:12px 16px; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit;
+  display:inline-flex; align-items:center; gap:8px; transition:transform .15s cubic-bezier(.16,1,.3,1), background .2s, color .2s; }
+.badge-btn .em{ font-size:20px; }
+.badge-btn:hover{ transform:translateY(-2px); }
+.badge-btn.got { border-style:solid; background:var(--gold); color:var(--ink); }
+.badge-btn.got .check{ font-weight:900; }
+.badge-note{ font-size:13px; color:rgba(31,26,36,0.6); margin-top:14px; }

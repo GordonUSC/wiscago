@@ -99,12 +99,93 @@
   </div>
 </section>
 
+<section class="section playful">
+  <div class="wrap">
+    <div class="eyebrow">Adventure badges</div>
+    <h2 class="display">Collect them all weekend.</h2>
+    <p class="lede" style="margin-top:18px;">Tap a badge when you do the thing. This page remembers, so you can show everyone what you earned in Chicago. Get all six and watch what happens.</p>
+    <div class="badges" id="badges">
+      <button class="badge-btn" data-b="sue"><span class="em">🦖</span> Stood under SUE the T. rex <span class="check"></span></button>
+      <button class="badge-btn" data-b="fossil"><span class="em">⚡</span> Found a Pokémon fossil <span class="check"></span></button>
+      <button class="badge-btn" data-b="villager"><span class="em">⛏️</span> Rescued the villagers <span class="check"></span></button>
+      <button class="badge-btn" data-b="cape"><span class="em">🧥</span> Unlocked the in-game cape <span class="check"></span></button>
+      <button class="badge-btn" data-b="parade"><span class="em">🏳️‍🌈</span> Marched in the parade <span class="check"></span></button>
+      <button class="badge-btn" data-b="hello"><span class="em">👋</span> Said hi to someone new <span class="check"></span></button>
+    </div>
+    <p class="badge-note" id="badge-note">0 of 6 earned. Let's go.</p>
+  </div>
+</section>
+
 <footer class="site">
   <div class="wrap">
     <div class="made">Made with love for the boys · June 2026</div>
     <div><a href="gordon.html">Next → Gordon</a></div>
   </div>
 </footer>
+
+<script>
+document.body.classList.add('js');
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ease = function(t){ return 1 - Math.pow(1-t, 3); };
+
+  // Count up the big stats the first time they scroll into view
+  var nums = document.querySelectorAll('.bigstat .num');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return; io.unobserve(e.target);
+        var el = e.target, end = parseInt(el.textContent, 10) || 0;
+        if (reduce) { el.textContent = end; return; }
+        var dur = 1100, start = null;
+        requestAnimationFrame(function f(t){
+          start = start || t; var p = Math.min((t-start)/dur, 1);
+          el.textContent = Math.round(end * ease(p));
+          if (p < 1) requestAnimationFrame(f);
+        });
+      });
+    }, { threshold: 0.5 });
+    nums.forEach(function(n){ io.observe(n); });
+  }
+
+  // Adventure badges: tap to earn, remembered across visits, confetti when all six land
+  var wrap = document.getElementById('badges'), note = document.getElementById('badge-note');
+  if (wrap) {
+    var btns = wrap.querySelectorAll('.badge-btn');
+    function refresh(){
+      var got = 0; btns.forEach(function(b){ if (b.classList.contains('got')) got++; });
+      note.textContent = got + ' of ' + btns.length + ' earned' + (got === btns.length ? '. You did it! 🌈' : '. Keep going.');
+    }
+    btns.forEach(function(b){
+      var k = 'wiscago-badge-' + b.dataset.b;
+      try { if (localStorage.getItem(k) === '1') b.classList.add('got'); } catch(e){}
+      b.addEventListener('click', function(){
+        b.classList.toggle('got');
+        try { localStorage.setItem(k, b.classList.contains('got') ? '1' : '0'); } catch(e){}
+        refresh();
+        var all = true; btns.forEach(function(x){ if (!x.classList.contains('got')) all = false; });
+        if (all && !reduce) celebrate();
+      });
+    });
+    refresh();
+  }
+
+  function celebrate(){
+    var c = document.createElement('canvas');
+    c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:200';
+    document.body.appendChild(c); var x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+    var cols = ['#E63946','#E8A93E','#7BA08A','#5BB0D6','#B83A6B','#7B1F2F'], P = [];
+    for (var i = 0; i < (innerWidth < 600 ? 70 : 140); i++)
+      P.push({ x: innerWidth/2, y: innerHeight/2, vx:(Math.random()-.5)*12, vy:Math.random()*-14-4, c:cols[i%cols.length], r:Math.random()*6+3, a:1 });
+    (function f(){
+      x.clearRect(0,0,c.width,c.height); var live = false;
+      P.forEach(function(p){ p.vy += .4; p.x += p.vx; p.y += p.vy; p.a -= .012;
+        if (p.a > 0){ live = true; x.globalAlpha = Math.max(p.a,0); x.fillStyle = p.c; x.fillRect(p.x,p.y,p.r,p.r); } });
+      live ? requestAnimationFrame(f) : c.remove();
+    })();
+  }
+})();
+</script>
 
 </body>
 </html>
