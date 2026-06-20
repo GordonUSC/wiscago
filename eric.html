@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eric Francksen · Wiscago</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="scrollbar" id="scrollbar"></div>
+<div class="pride-bar progress"></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="index.html">Wiscago <span class="sub">June 2026</span></a>
+    <nav class="primary">
+      <a href="index.html">Home</a>
+      <a href="eric.html" class="current">Eric</a>
+      <a href="crystal.html">Crystal</a>
+      <a href="boys.html">The Boys</a>
+      <a href="gordon.html">Gordon</a>
+      <a href="weekend.html">The Weekend</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">The Host</div>
+    <h1 class="display"><span class="accent">Eric Francksen.</span><br>The one who opens the door.</h1>
+    <p class="lede" style="margin-top: 24px;">Crystal's husband. Father of James, Henry, and Oscar. Senior Digital and Technology Product Owner at American Family Insurance in Madison. Executive Producer of Gay Gaming Professionals. Steward of the Wizards of the Coast partnership. And the host whose Madison home is named the Dragon House because the dragons live there.</p>
+    <div class="hero-meta">
+      <div>Madison, Wisconsin<br>Home and AmFam day job</div>
+      <div>GGP EP<br>The producer of moments</div>
+      <div>The Dragon Table<br>Premiered at GDC 2026</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="moment reveal">
+      <div class="eyebrow">Sunday June 28</div>
+      <div class="rainbow-rule"></div>
+      <h2 class="display">His first Pride parade.</h2>
+      <p>Eric has built the rooms where this community gathers. On Sunday he steps into one he has never stood in before. His first Pride parade, in Chicago, with Crystal at his side and Gordon at his shoulder.</p>
+      <p>The man who produces everyone else's moments gets one of his own. Gordon is holding June 28 closest of all this year, and this is why.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">Who Eric is</div>
+    <h2 class="display">Producer of moments. Builder of rooms.</h2>
+    <p class="lede" style="margin-top: 18px;">Eric makes the events that make the partnerships that make the community. Three years of Zero Proof Board Game Night at GDC. Six hundred plus guests under one roof. The Wizards of the Coast leadership at the table because Eric built the relationship.</p>
+    <div class="cards-grid">
+      <div class="fact-card alt">
+        <h4>Zero Proof Board Game Night</h4>
+        <p>Three years running with WotC as presenting sponsor. The largest flagship event in GGP history. Eric is the executive producer.</p>
+      </div>
+      <div class="fact-card teal">
+        <h4>American Family Insurance</h4>
+        <p>Eric's day job. A Senior Digital and Technology Product Owner at AmFam in Madison. The day-job that funds the dream-job that builds the community.</p>
+      </div>
+      <div class="fact-card sage">
+        <h4>The Dragon House &amp; the Dragon Table</h4>
+        <p>Eric's home in Madison. Where the custom Dungeons &amp; Dragons table he commissioned now lives. Where the GGP partnership is rooted. Where Crystal and the boys live the everyday.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">What Eric brings to Chicago</div>
+    <h2 class="display">Dad energy and producer instincts.</h2>
+    <div class="quote">
+      You weren't at EDC, but you were threaded through it.
+      <span class="attr">Gordon to Eric, May 2026</span>
+    </div>
+    <p class="lede">For Chicago, Eric is the dad who knows where the boys want to be, the producer who will get the family from the Field Museum to Rosemont without anyone melting down, and the brother who will stand next to Gordon as the Pride Parade rolls past Northalsted on Sunday.</p>
+    <div class="callout">
+      <div class="label">For the trip</div>
+      <p>Eric has been in enough big rooms to know how to make a small one feel right. Trust the producer. Follow the dad. The weekend is in good hands.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">Things Eric loves</div>
+    <h2 class="display">A short list, because he is too humble for a long one.</h2>
+    <div class="cards-grid">
+      <div class="fact-card"><div class="icon">🐉</div><h4>D&amp;D</h4><p>Real campaigns. Real friendship. The Dragon Table is the proof.</p></div>
+      <div class="fact-card teal"><div class="icon">🏡</div><h4>Madison</h4><p>Home. The slow rhythm Eric built on purpose. The Brewers game in summer. The Wisconsin he comes from.</p></div>
+      <div class="fact-card sage"><div class="icon">👨‍👩‍👦‍👦</div><h4>His family</h4><p>Crystal. James. Henry. Oscar. The reason every "yes" is sized to fit around their lives.</p></div>
+      <div class="fact-card berry"><div class="icon">🤝</div><h4>His people</h4><p>The WotC team. The GGP family. Gordon. Mark Purvis. John Hight. The brothers and sisters of the table.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="made">Made with love for the family · June 2026</div>
+    <div><a href="crystal.html">Next → Crystal</a></div>
+  </div>
+</footer>
+
+<script>
+document.body.classList.add('js');
+(function(){
+  var bar=document.getElementById('scrollbar');
+  if(bar){
+    var upd=function(){ var h=document.documentElement.scrollHeight-window.innerHeight; bar.style.width=(h>0?(window.scrollY/h*100):0)+'%'; };
+    upd(); window.addEventListener('scroll',upd,{passive:true}); window.addEventListener('resize',upd);
+  }
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:0.12});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+
+</body>
+</html>

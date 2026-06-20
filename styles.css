@@ -1,0 +1,598 @@
+/* Wiscago: A Pride Weekend Together — shared styles */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700;800&display=swap');
+:root {
+  --cream: #FAF6EF;
+  --paper: #F2EBD9;
+  --ink: #1F1A24;
+  --burgundy: #7B1F2F;
+  --teal: #2A4858;
+  --vermilion: #E63946;
+  --gold: #E8A93E;
+  --sage: #7BA08A;
+  --skyblue: #5BB0D6;
+  --berry: #B83A6B;
+  --rule: rgba(31, 26, 36, 0.12);
+  --shadow: 0 14px 40px rgba(31, 26, 36, 0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--burgundy); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--vermilion); }
+
+/* Layout */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px; }
+.section { padding: 56px 0; }
+.section + .section { border-top: 1px solid var(--rule); }
+
+/* Display type */
+.display {
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+h1.display { font-size: clamp(48px, 7.5vw, 96px); }
+h2.display { font-size: clamp(36px, 5vw, 64px); }
+h3.display { font-size: clamp(26px, 3.4vw, 40px); }
+.lede {
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.55;
+  max-width: 60ch;
+  color: rgba(31, 26, 36, 0.82);
+}
+.small { font-size: 14px; color: rgba(31, 26, 36, 0.65); }
+
+/* Header / nav */
+.masthead {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+.masthead .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.brand {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--burgundy);
+  border: none;
+}
+.brand .sub {
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 36, 0.55);
+  font-weight: 700;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+nav.primary {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+nav.primary a {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+nav.primary a:hover { background: var(--cream); }
+nav.primary a.current {
+  background: var(--burgundy);
+  color: var(--cream);
+}
+
+/* Pride rainbow bar */
+.pride-bar {
+  height: 6px;
+  background: linear-gradient(90deg,
+    #E63946 0%, #E63946 16%,
+    #F4A261 16%, #F4A261 32%,
+    #FFE066 32%, #FFE066 48%,
+    #7BA08A 48%, #7BA08A 64%,
+    #5BB0D6 64%, #5BB0D6 80%,
+    #B83A6B 80%, #B83A6B 100%);
+}
+.pride-bar.progress {
+  background: linear-gradient(90deg,
+    #1F1A24 0%, #1F1A24 8%,
+    #7B4A2A 8%, #7B4A2A 16%,
+    #5BB0D6 16%, #5BB0D6 24%,
+    #F8C8DC 24%, #F8C8DC 32%,
+    #FFFFFF 32%, #FFFFFF 40%,
+    #E63946 40%, #E63946 50%,
+    #F4A261 50%, #F4A261 60%,
+    #FFE066 60%, #FFE066 70%,
+    #7BA08A 70%, #7BA08A 80%,
+    #5BB0D6 80%, #5BB0D6 90%,
+    #B83A6B 90%, #B83A6B 100%);
+}
+
+/* Hero */
+.hero {
+  padding: 80px 0 56px 0;
+  background: var(--cream);
+  position: relative;
+}
+.hero .eyebrow { color: var(--burgundy); }
+.hero h1.display .accent { color: var(--burgundy); }
+.hero h1.display .sub-accent { color: var(--teal); }
+.hero-meta {
+  display: flex;
+  gap: 2vw;
+  margin-top: 5vh;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 36, 0.6);
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+.hero-meta > div {
+  border-left: 3px solid var(--gold);
+  padding-left: 12px;
+  min-width: 180px;
+}
+
+/* People grid (landing) */
+.people {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+}
+.person-card {
+  background: var(--paper);
+  padding: 28px 24px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 4px 16px rgba(31, 26, 36, 0.06);
+  transition: transform 0.18s, box-shadow 0.18s;
+  display: block;
+  color: var(--ink);
+}
+.person-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(31, 26, 36, 0.14);
+  color: var(--ink);
+}
+.person-card .role {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.person-card .name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 36px;
+  line-height: 1.05;
+  color: var(--ink);
+  font-weight: 500;
+}
+.person-card .tag {
+  font-size: 14px;
+  color: rgba(31, 26, 36, 0.7);
+  margin-top: 10px;
+  line-height: 1.45;
+}
+
+/* Itinerary */
+.itinerary {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 18px 28px;
+  margin-top: 28px;
+}
+.itinerary .day {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 22px;
+  color: var(--burgundy);
+  border-right: 2px solid var(--gold);
+  padding-right: 16px;
+  text-align: right;
+  font-weight: 500;
+  line-height: 1.15;
+}
+.itinerary .body {
+  font-size: 16px;
+  line-height: 1.5;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--rule);
+}
+.itinerary .body strong { color: var(--ink); }
+.itinerary > div:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 0; }
+
+/* Cards / accent boxes */
+.callout {
+  background: var(--paper);
+  border-left: 4px solid var(--burgundy);
+  padding: 24px 28px;
+  border-radius: 0 6px 6px 0;
+  margin-top: 28px;
+}
+.callout .label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.callout p { margin-top: 8px; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 28px;
+}
+.fact-card {
+  background: var(--paper);
+  padding: 24px;
+  border-radius: 6px;
+  border-top: 4px solid var(--gold);
+}
+.fact-card.alt { border-top-color: var(--burgundy); }
+.fact-card.teal { border-top-color: var(--teal); }
+.fact-card.sage { border-top-color: var(--sage); }
+.fact-card.berry { border-top-color: var(--berry); }
+.fact-card .icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.fact-card h4 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.fact-card p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(31, 26, 36, 0.78);
+}
+
+/* Quote block */
+.quote {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--ink);
+  border-left: 4px solid var(--burgundy);
+  padding-left: 24px;
+  margin: 32px 0;
+  max-width: 30ch;
+}
+.quote .attr {
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+  display: block;
+  margin-top: 14px;
+}
+
+/* Footer */
+footer.site {
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  padding: 36px 0;
+  margin-top: 64px;
+}
+footer.site .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: rgba(31, 26, 36, 0.6);
+}
+footer.site .made {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--burgundy);
+}
+
+/* Boys page playful */
+.playful {
+  background: linear-gradient(180deg, var(--cream) 0%, #FBF1D9 100%);
+}
+.boys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+.boy-card {
+  background: white;
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 8px 24px rgba(31, 26, 36, 0.08);
+  border-top: 8px solid var(--burgundy);
+}
+.boy-card.james { border-top-color: var(--burgundy); }
+.boy-card.henry { border-top-color: var(--teal); }
+.boy-card.oscar { border-top-color: var(--gold); }
+.boy-card h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 38px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.boy-card .label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+}
+.fun-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+.fun-badge.alt { background: var(--vermilion); color: var(--cream); }
+.fun-badge.teal { background: var(--teal); color: var(--cream); }
+.fun-badge.sage { background: var(--sage); color: var(--cream); }
+.fun-badge.berry { background: var(--berry); color: var(--cream); }
+
+/* Big stat */
+.bigstat {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  margin-top: 28px;
+}
+.bigstat .stat {
+  text-align: center;
+  padding: 24px 16px;
+  background: var(--paper);
+  border-radius: 8px;
+}
+.bigstat .num {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 60px;
+  color: var(--burgundy);
+  line-height: 1;
+  font-weight: 500;
+}
+.bigstat .lbl {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 36, 0.65);
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   v2 ELEVATION (2026-06-15) — fonts now load, plus countdown,
+   the "first Pride" spotlight, the values band, signature,
+   scroll progress, and gentle reveal-on-scroll.
+   ============================================================ */
+
+/* Warmer hero wash + a faint rainbow horizon */
+.hero {
+  background:
+    radial-gradient(120% 80% at 12% 0%, rgba(232,169,62,0.10), transparent 60%),
+    linear-gradient(180deg, var(--cream) 0%, #FBF3E3 100%);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 4px;
+  background: linear-gradient(90deg,#E63946,#F4A261,#FFE066,#7BA08A,#5BB0D6,#B83A6B);
+  opacity: 0.55;
+}
+
+/* Fixed scroll-progress ribbon */
+.scrollbar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 4px; width: 0%;
+  z-index: 50;
+  background: linear-gradient(90deg,#E63946,#F4A261,#FFE066,#7BA08A,#5BB0D6,#B83A6B);
+  transition: width 0.08s linear;
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+.countdown .unit {
+  background: var(--paper);
+  border-radius: 14px;
+  border-top: 3px solid var(--vermilion);
+  padding: 14px 20px;
+  text-align: center;
+  min-width: 92px;
+  box-shadow: 0 6px 18px rgba(31,26,36,0.08);
+}
+.countdown .unit:nth-child(2) { border-top-color: var(--gold); }
+.countdown .unit:nth-child(3) { border-top-color: var(--sage); }
+.countdown .unit:nth-child(4) { border-top-color: var(--skyblue); }
+.countdown .n {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 46px;
+  line-height: 1;
+  color: var(--burgundy);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.countdown .u {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(31,26,36,0.6);
+  font-weight: 700;
+  margin-top: 8px;
+}
+.countdown-lead {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 700;
+  margin-top: 32px;
+}
+
+/* The spotlight "moment" — the emotional centerpiece */
+.moment {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--burgundy) 0%, #4A1320 100%);
+  color: var(--cream);
+  border-radius: 22px;
+  padding: clamp(32px, 5vw, 68px);
+  margin-top: 8px;
+  box-shadow: 0 24px 60px rgba(123,31,47,0.28);
+}
+.moment::before {
+  content: "🏳️‍🌈";
+  position: absolute;
+  right: -10px; top: -20px;
+  font-size: 160px;
+  opacity: 0.12;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+.moment .eyebrow { color: var(--gold); }
+.moment h2.display { color: var(--cream); max-width: 18ch; }
+.moment p {
+  color: rgba(255,255,255,0.88);
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.6;
+  max-width: 56ch;
+  margin-top: 18px;
+}
+.moment .rainbow-rule {
+  height: 6px; width: 132px;
+  border-radius: 99px;
+  background: linear-gradient(90deg,#FFE066,#F4A261,#E63946,#B83A6B,#5BB0D6,#7BA08A);
+  margin: 8px 0 4px;
+}
+
+/* Values band — Crystal's words: Love, Thoughtfulness, Adventure */
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 30px;
+}
+.value {
+  text-align: center;
+  padding: 28px 18px;
+  background: var(--paper);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(31,26,36,0.06);
+}
+.value .word {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.1;
+  color: var(--burgundy);
+}
+.value .meaning {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(31,26,36,0.72);
+  margin-top: 10px;
+}
+.values-attr {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(31,26,36,0.55);
+  font-weight: 700;
+  margin-top: 18px;
+}
+
+/* Handwritten signature accent */
+.signature {
+  font-family: "Caveat", cursive;
+  font-size: clamp(30px, 4vw, 46px);
+  color: var(--burgundy);
+  line-height: 1;
+  margin-top: 10px;
+}
+
+/* Gentle reveal-on-scroll (progressive enhancement: only hides when JS is on) */
+body.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+body.js .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  body.js .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero { padding: 56px 0 40px 0; }
+  .section { padding: 40px 0; }
+  .itinerary { grid-template-columns: 80px 1fr; gap: 12px 16px; }
+  .itinerary .day { font-size: 16px; padding-right: 10px; }
+  nav.primary a { font-size: 12px; padding: 6px 10px; }
+  .brand { font-size: 18px; }
+  .values { grid-template-columns: 1fr; }
+  .countdown .unit { min-width: 72px; padding: 12px 14px; }
+  .countdown .n { font-size: 38px; }
+}
