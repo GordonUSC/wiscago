@@ -685,3 +685,81 @@ nav.primary a:active { transform: translateY(1px); }
 .badge-btn.got { border-style:solid; background:var(--gold); color:var(--ink); }
 .badge-btn.got .check{ font-weight:900; }
 .badge-note{ font-size:13px; color:rgba(31,26,36,0.6); margin-top:14px; }
+
+/* ===== Tickets-secured microcopy ===== */
+.ticket-note { color: var(--sage); font-weight: 700; }
+.card-ticket {
+  margin-top: 12px; display: inline-block;
+  font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.04em; color: var(--sage);
+  border: 1px solid rgba(123,160,138,0.5); border-radius: 999px;
+  padding: 4px 12px; background: rgba(123,160,138,0.10);
+}
+
+/* ===== The thread home — art-directed atlas section ===== */
+.thread-home {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 12% 0%, #2f5366 0%, transparent 55%),
+    radial-gradient(130% 120% at 100% 100%, #3a1f2b 0%, transparent 50%),
+    linear-gradient(160deg, #20323b 0%, #16232a 60%, #121b21 100%);
+  color: #EFE7D6;
+  padding: clamp(64px, 9vw, 132px) 0;
+  border-top: 3px solid var(--gold);
+}
+.thread-home .wrap { position: relative; z-index: 2; }
+.atlas-grid {
+  position: absolute; inset: 0; z-index: 1; opacity: 0.16;
+  background-image:
+    linear-gradient(rgba(232,169,62,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,169,62,0.5) 1px, transparent 1px);
+  background-size: 46px 46px; background-position: center;
+  mask-image: radial-gradient(120% 90% at 50% 30%, #000 35%, transparent 78%);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 30%, #000 35%, transparent 78%);
+}
+.thread-home .eyebrow.gold { color: var(--gold); }
+.thread-home .motto {
+  color: #FBF3E2; font-size: clamp(40px, 6.4vw, 86px);
+  line-height: 0.98; letter-spacing: -0.01em; margin: 6px 0 0;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.35);
+}
+.thread-lede {
+  max-width: 720px; margin: 22px 0 0; font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.65; color: rgba(239,231,214,0.86);
+}
+.thread-lede strong { color: var(--gold); }
+.thread-pair {
+  margin-top: clamp(40px, 6vw, 72px);
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px);
+}
+.thread-panel {
+  position: relative; padding: clamp(26px, 3vw, 40px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+  border: 1px solid rgba(232,169,62,0.28); border-radius: 4px;
+  backdrop-filter: blur(2px);
+}
+.thread-panel .coord {
+  font-family: "Inter", sans-serif; font-size: 11.5px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.85; margin-bottom: 18px;
+}
+.thread-panel h3 {
+  font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600;
+  font-size: clamp(24px, 2.6vw, 33px); line-height: 1.08; margin: 0 0 14px;
+  color: #FBF3E2;
+}
+.thread-panel p { font-size: 16px; line-height: 1.68; color: rgba(239,231,214,0.82); margin: 0; }
+.thread-panel em { color: #F2C879; font-style: italic; }
+.thread-tag {
+  margin-top: 22px; display: inline-block; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.05em; color: #16232a; background: var(--gold);
+  padding: 5px 14px; border-radius: 999px;
+}
+.thread-close {
+  margin-top: clamp(40px, 5vw, 64px); max-width: 760px;
+  font-family: "Caveat", cursive; font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.4; color: #F2C879;
+}
+@media (max-width: 760px) {
+  .thread-pair { grid-template-columns: 1fr; }
+}
