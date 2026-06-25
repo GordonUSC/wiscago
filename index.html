@@ -244,9 +244,9 @@ document.body.classList.add('js');
   function phase(){
     var n = new Date();
     if (n < fri) return null;                 // before the trip, the countdown carries it
-    if (n < sat) return 'Day one in Chicago. Arrivals and the welcome dinner. 🛬';
-    if (n < sun) return 'Adventure day. Pokémon fossils, then Minecraft villagers. 🦖⛏️';
-    if (n < mon) return "Pride Sunday. Eric's first parade, Free to Be Proud. 🏳️‍🌈";
+    if (n < sat) return 'Day one. Gordon lands ORD 11:25 AM, welcome dinner tonight. 🛬';
+    if (n < sun) return 'Adventure day. Field Museum AM (1400 S DuSable LSD), Minecraft PM (EXP Rosemont). 🦖⛏️';
+    if (n < mon) return "Pride Sunday. Step off 11 AM, Sheridan & Broadway, Red Line to Sheridan. Eric's first. 🏳️‍🌈";
     return 'Wiscago, in the books. On to the Dragon House. 🐉';
   }
   function upd(){ var p = phase(); if (p){ txt.textContent = 'Right now: ' + p; bar.style.display = 'inline-flex'; } else { bar.style.display = 'none'; } }
