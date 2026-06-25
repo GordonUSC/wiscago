@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wiscago Arcade · Games for James, Henry &amp; Oscar</title>
+<meta name="description" content="Bespoke learning games for the Francksen boys: World Cup, Pokémon, Minecraft, Stoughton, Norwegian history, math, and joy. Play together all weekend.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root{
+    --james:var(--burgundy);
+    --henryA:var(--henry-red); --henryB:var(--henry-green);
+    --oscarA:var(--oscar-orange); --oscarB:var(--oscar-blue);
+  }
+  .arcade-hero{ text-align:center; }
+  .arcade-hero .display{ line-height:1.02; }
+  .team-banner{
+    position:sticky; top:0; z-index:40;
+    background:linear-gradient(90deg,var(--burgundy),var(--henry-red),var(--oscar-orange),var(--oscar-blue),var(--henry-green));
+    color:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:center; gap:14px;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:14px; box-shadow:0 4px 16px rgba(31,26,36,.18);
+  }
+  .team-banner .trophy{ font-size:20px; }
+  .team-banner .tt-num{ font-variant-numeric:tabular-nums; font-size:18px; }
+  .team-banner .tt-lvl{ background:rgba(255,255,255,.22); padding:3px 10px; border-radius:100px; font-size:12px; }
+
+  .who{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:22px 0 6px; }
+  .who-btn{ appearance:none; border:3px solid var(--rule); background:#fff; border-radius:16px; padding:12px 18px;
+    font-family:'Inter',sans-serif; font-weight:800; font-size:16px; cursor:pointer; transition:transform .12s, box-shadow .12s; color:var(--ink); }
+  .who-btn .em{ display:block; font-size:26px; margin-bottom:2px; }
+  .who-btn[data-boy="james"].on{ border-color:var(--james); box-shadow:0 8px 22px rgba(123,31,47,.3); }
+  .who-btn[data-boy="henry"].on{ border-color:var(--henry-red); box-shadow:0 8px 22px rgba(192,57,43,.3); }
+  .who-btn[data-boy="oscar"].on{ border-color:var(--oscar-orange); box-shadow:0 8px 22px rgba(230,126,34,.3); }
+  .who-btn.on{ transform:translateY(-3px); }
+  .who-note{ text-align:center; font-size:13px; color:rgba(31,26,36,.6); }
+
+  .arcade-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:22px; margin-top:8px; }
+  .cab{ background:#fff; border-radius:20px; border:1px solid var(--rule); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; }
+  .cab__top{ padding:18px 20px 12px; color:#fff; }
+  .cab__top h3{ font-family:'Inter',sans-serif; font-weight:800; font-size:20px; margin:0; display:flex; align-items:center; gap:10px; }
+  .cab__top .sub{ font-size:13px; opacity:.92; margin-top:4px; }
+  .cab__skill{ display:inline-block; margin-top:8px; font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; background:rgba(255,255,255,.22); padding:3px 10px; border-radius:100px; }
+  .cab__body{ padding:18px 20px 22px; flex:1; display:flex; flex-direction:column; }
+  /* cabinet header colors */
+  .c-worldcup .cab__top{ background:linear-gradient(135deg,#0B3D91,#B31942); }
+  .c-pokemon .cab__top{ background:linear-gradient(135deg,#E3350D,#FFCB05); }
+  .c-minecraft .cab__top{ background:linear-gradient(135deg,#3B8526,#6B4F2A); }
+  .c-norsk .cab__top{ background:linear-gradient(135deg,#002868,#BA0C2F); }
+  .c-stoughton .cab__top{ background:linear-gradient(135deg,#1D6F42,#C0392B); }
+  .c-math .cab__top{ background:linear-gradient(135deg,#2980B9,#27AE60); }
+  .c-listen .cab__top{ background:linear-gradient(135deg,#7B1F2F,#E67E22); }
+  .c-quest .cab__top{ background:linear-gradient(135deg,#8E44AD,#2980B9); }
+  .c-uncle .cab__top{ background:linear-gradient(135deg,#E8A93E,#B83A6B); }
+
+  .q{ font-weight:700; font-size:16px; margin-bottom:12px; min-height:46px; }
+  .opts{ display:grid; gap:8px; }
+  .opt{ appearance:none; text-align:left; border:2px solid var(--rule); background:var(--cream); border-radius:12px; padding:11px 14px;
+    font-family:'Inter',sans-serif; font-size:15px; font-weight:600; cursor:pointer; color:var(--ink); transition:transform .1s, border-color .12s, background .12s; }
+  .opt:hover{ transform:translateX(3px); }
+  .opt.right{ border-color:#1D6F42; background:#E7F6EC; }
+  .opt.wrong{ border-color:#C0392B; background:#FBE9E7; }
+  .opt:disabled{ cursor:default; }
+  .feedback{ margin-top:12px; font-size:14px; font-weight:700; min-height:20px; }
+  .feedback.good{ color:#1D6F42; }
+  .feedback.try{ color:#C0392B; }
+  .cab__foot{ margin-top:auto; padding-top:14px; display:flex; align-items:center; justify-content:space-between; }
+  .progress-dots{ display:flex; gap:5px; }
+  .pdot{ width:9px; height:9px; border-radius:50%; background:var(--rule); }
+  .pdot.done{ background:#1D6F42; }
+  .pdot.miss{ background:#E8A93E; }
+  .mini-btn{ appearance:none; border:2px solid var(--burgundy); color:var(--burgundy); background:transparent; border-radius:100px;
+    padding:7px 16px; font-family:'Inter',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+  .mini-btn:hover{ background:var(--burgundy); color:#fff; }
+  .done-stamp{ font-weight:800; color:#1D6F42; font-size:14px; }
+
+  /* memory match */
+  .memo{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .card{ aspect-ratio:1/1; border-radius:12px; border:none; background:var(--teal); cursor:pointer; font-size:24px;
+    display:flex; align-items:center; justify-content:center; color:transparent; transition:transform .15s, background .15s; }
+  .card.up{ background:var(--cream); color:var(--ink); border:2px solid var(--gold); }
+  .card.matched{ background:#E7F6EC; color:var(--ink); border:2px solid #1D6F42; cursor:default; }
+
+  /* potion lab */
+  .ingredients{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .ingredient{ appearance:none; border:2px solid var(--rule); background:var(--cream); border-radius:12px; padding:12px 8px;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:14px; cursor:pointer; color:var(--ink); }
+  .ingredient .em{ display:block; font-size:24px; }
+  .ingredient.used{ opacity:.4; cursor:default; }
+  .brew-track{ display:flex; gap:6px; margin:12px 0; min-height:40px; align-items:center; flex-wrap:wrap; }
+  .brew-step{ background:#3B8526; color:#fff; border-radius:8px; padding:6px 10px; font-size:13px; font-weight:700; }
+
+  /* listen & echo */
+  .echo-pads{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:6px 0 12px; }
+  .pad{ aspect-ratio:1.4/1; border:none; border-radius:14px; cursor:pointer; opacity:.55; transition:opacity .12s, transform .1s;
+    font-family:'Inter',sans-serif; font-weight:800; color:#fff; font-size:15px; }
+  .pad[data-p="james"]{ background:var(--burgundy); }
+  .pad[data-p="henry"]{ background:var(--henry-green); }
+  .pad[data-p="oscar"]{ background:var(--oscar-blue); }
+  .pad.flash{ opacity:1; transform:scale(1.04); }
+
+  /* quest deck */
+  .quest-card{ background:var(--cream); border-radius:14px; padding:16px; border-left:5px solid #8E44AD; }
+  .quest-card .badge-line{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#8E44AD; margin-bottom:6px; }
+  .quest-card p{ font-size:15.5px; line-height:1.5; }
+  .quest-actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+
+  .scoreline{ font-size:13px; color:rgba(31,26,36,.6); }
+  .win-note{ text-align:center; margin:30px auto 0; max-width:640px; background:#fff; border-radius:20px; padding:26px; box-shadow:var(--shadow); border:1px solid var(--rule); }
+  @media (max-width:520px){ .memo{ grid-template-columns:repeat(4,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="pride-bar progress"></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="index.html">Wiscago <span class="sub">June 2026</span></a>
+    <nav class="primary">
+      <a href="index.html">Home</a>
+      <a href="eric.html">Eric</a>
+      <a href="crystal.html">Crystal</a>
+      <a href="boys.html">The Boys</a>
+      <a href="games.html" class="current">Arcade</a>
+      <a href="gordon.html">Gordon</a>
+      <a href="weekend.html">The Weekend</a>
+    </nav>
+  </div>
+</header>
+
+<div class="team-banner">
+  <span class="trophy">🏆</span>
+  <span>Team Trophy: <span class="tt-num" id="ttNum">0</span> points</span>
+  <span class="tt-lvl" id="ttLvl">Rookies</span>
+</div>
+
+<section class="hero arcade-hero playful">
+  <div class="wrap">
+    <div class="eyebrow">Just for James, Henry &amp; Oscar</div>
+    <h1 class="display">The <span class="accent">Wiscago</span> <span style="color:var(--oscar-orange)">Arcade</span>.</h1>
+    <p class="lede" style="margin-top:18px; max-width:640px; margin-left:auto; margin-right:auto;">Nine little games to play all weekend long, on your own device or passing it around. Here is the secret: <strong>you all win together.</strong> Every point any of you earns goes into one big Team Trophy. Help each other, get curious, and listen close.</p>
+
+    <div class="who" id="whoRow">
+      <button class="who-btn" data-boy="james"><span class="em">🦁</span>James</button>
+      <button class="who-btn" data-boy="henry"><span class="em">🟥🟩</span>Henry</button>
+      <button class="who-btn" data-boy="oscar"><span class="em">🟧🟦</span>Oscar</button>
+    </div>
+    <p class="who-note">Tap who's playing right now. You can pass the device and tap a new name anytime.</p>
+  </div>
+</section>
+
+<section class="section playful">
+  <div class="wrap">
+    <div class="arcade-grid">
+
+      <!-- 1. WORLD CUP -->
+      <div class="cab c-worldcup" data-game="worldcup">
+        <div class="cab__top">
+          <h3>⚽ World Cup Cup</h3>
+          <div class="sub">USA at the 2026 World Cup, the one happening right now.</div>
+          <span class="cab__skill">Curiosity</span>
+        </div>
+        <div class="cab__body" data-quiz>
+          <div class="q"></div>
+          <div class="opts"></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <div class="progress-dots"></div>
+            <button class="mini-btn next" style="display:none">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. POKEMON FOSSIL MATCH -->
+      <div class="cab c-pokemon" data-game="pokemon">
+        <div class="cab__top">
+          <h3>🦖 Fossil Match</h3>
+          <div class="sub">Find the matching fossil Pokémon. Just like the Field Museum.</div>
+          <span class="cab__skill">Memory together</span>
+        </div>
+        <div class="cab__body">
+          <div class="memo" data-memo></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <span class="scoreline" data-memo-score>0 pairs</span>
+            <button class="mini-btn" data-memo-reset>Shuffle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. MINECRAFT POTION LAB -->
+      <div class="cab c-minecraft" data-game="minecraft">
+        <div class="cab__top">
+          <h3>⛏️ Potion Lab</h3>
+          <div class="sub">Brew the Potion of Weakness to cure the villager. Right order wins.</div>
+          <span class="cab__skill">Follow the steps</span>
+        </div>
+        <div class="cab__body" data-potion>
+          <p style="font-size:14px;font-weight:700;margin-bottom:6px;">The recipe, in order:</p>
+          <ol style="font-size:13px;margin:0 0 10px 18px;line-height:1.6;color:rgba(31,26,36,.7)">
+            <li>Water Bottle</li><li>Fermented Spider Eye</li><li>Splash it with a Golden Apple</li>
+          </ol>
+          <div class="brew-track" data-track><em style="color:rgba(31,26,36,.5);font-size:13px">Tap ingredients in the right order…</em></div>
+          <div class="ingredients" data-ingredients></div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+
+      <!-- 4. NORWEGIAN -->
+      <div class="cab c-norsk" data-game="norsk">
+        <div class="cab__top">
+          <h3>🇳🇴 Norwegian Explorer</h3>
+          <div class="sub">Stoughton is the most Norwegian town in Wisconsin. Learn the words.</div>
+          <span class="cab__skill">Curiosity</span>
+        </div>
+        <div class="cab__body" data-quiz>
+          <div class="q"></div>
+          <div class="opts"></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <div class="progress-dots"></div>
+            <button class="mini-btn next" style="display:none">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. STOUGHTON -->
+      <div class="cab c-stoughton" data-game="stoughton">
+        <div class="cab__top">
+          <h3>🏡 Stoughton Story</h3>
+          <div class="sub">Your home town has some amazing secrets. Did you know these?</div>
+          <span class="cab__skill">Home pride</span>
+        </div>
+        <div class="cab__body" data-quiz>
+          <div class="q"></div>
+          <div class="opts"></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <div class="progress-dots"></div>
+            <button class="mini-btn next" style="display:none">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. MATH SCORE LAB -->
+      <div class="cab c-math" data-game="math">
+        <div class="cab__top">
+          <h3>🔢 Score Lab</h3>
+          <div class="sub">Soccer-and-dinosaur math. Solve it, score it.</div>
+          <span class="cab__skill">Math &amp; science</span>
+        </div>
+        <div class="cab__body" data-math>
+          <div class="q"></div>
+          <div class="opts"></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <span class="scoreline" data-math-streak>Streak: 0</span>
+            <button class="mini-btn next" style="display:none">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. LISTEN & ECHO -->
+      <div class="cab c-listen" data-game="listen">
+        <div class="cab__top">
+          <h3>👂 Listen &amp; Echo</h3>
+          <div class="sub">Watch the pattern, then tap it back. One watches, all remember.</div>
+          <span class="cab__skill">Active listening</span>
+        </div>
+        <div class="cab__body" data-echo>
+          <p style="font-size:14px;font-weight:700;margin-bottom:4px;">How to play together:</p>
+          <p style="font-size:13px;color:rgba(31,26,36,.7);margin-bottom:8px;">One of you presses Start and calls out the colors as they flash. The others help remember. Then tap them back in order.</p>
+          <div class="echo-pads">
+            <button class="pad" data-p="james">James</button>
+            <button class="pad" data-p="henry">Henry</button>
+            <button class="pad" data-p="oscar">Oscar</button>
+          </div>
+          <div class="cab__foot">
+            <span class="scoreline" data-echo-level>Level 0</span>
+            <button class="mini-btn" data-echo-start>Start the pattern</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+
+      <!-- 8. TEAM QUEST -->
+      <div class="cab c-quest" data-game="quest">
+        <div class="cab__top">
+          <h3>🤝 Team Quests</h3>
+          <div class="sub">Real-life missions for the weekend. Do them together.</div>
+          <span class="cab__skill">Collaboration</span>
+        </div>
+        <div class="cab__body" data-quest>
+          <div class="quest-card">
+            <div class="badge-line" data-quest-tag></div>
+            <p data-quest-text></p>
+          </div>
+          <div class="quest-actions">
+            <button class="mini-btn" data-quest-done>✓ We did it! (+15)</button>
+            <button class="mini-btn" data-quest-skip>Another one →</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+
+      <!-- 9. UNCLE GORDON JOY -->
+      <div class="cab c-uncle" data-game="uncle">
+        <div class="cab__top">
+          <h3>✨ Uncle G's Joy Jar</h3>
+          <div class="sub">Uncle Gordon is visiting! Tap for a fact or a kindness mission.</div>
+          <span class="cab__skill">Joy</span>
+        </div>
+        <div class="cab__body" data-joy>
+          <div class="quest-card" style="border-left-color:var(--gold)">
+            <div class="badge-line" style="color:var(--gold)" data-joy-tag>Tap the jar</div>
+            <p data-joy-text>Uncle Gordon flew all the way from Los Angeles to be with you. Tap below for your first bit of joy.</p>
+          </div>
+          <div class="quest-actions">
+            <button class="mini-btn" data-joy-next>✨ Open the jar (+5)</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="win-note">
+      <h3 class="display" style="font-size:26px;margin-bottom:8px;">How the Team Trophy works</h3>
+      <p style="font-size:15px;line-height:1.6;color:rgba(31,26,36,.78)">There is no "winner" and no "loser" here. Every point any one of you earns is added to <strong>one shared trophy for all three of you.</strong> Help your brother get a hard one right. Read a question out loud so everyone can think. The faster you work as a team, the higher the trophy climbs. Reach <strong>500</strong> and you are officially <strong>Wiscago Champions.</strong></p>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="made">Made with love for James, Henry &amp; Oscar · June 2026</div>
+    <div><a href="boys.html">← The Boys</a> · <a href="index.html">Home</a></div>
+  </div>
+</footer>
+
+<script>
+document.body.classList.add('js');
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LS = {
+    get:function(k,d){ try{ var v=localStorage.getItem('wiscago-arcade-'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
+    set:function(k,v){ try{ localStorage.setItem('wiscago-arcade-'+k, JSON.stringify(v)); }catch(e){} }
+  };
+
+  /* ---------- Team Trophy (shared score) ---------- */
+  var score = LS.get('score', 0);
+  var ttNum = document.getElementById('ttNum'), ttLvl = document.getElementById('ttLvl');
+  var LEVELS = [[0,'Rookies'],[60,'Explorers'],[150,'Adventurers'],[280,'Heroes'],[420,'Legends'],[500,'Wiscago Champions 🌈']];
+  function levelName(s){ var n='Rookies'; LEVELS.forEach(function(L){ if(s>=L[0]) n=L[1]; }); return n; }
+  function paintTrophy(){ ttNum.textContent = score; ttLvl.textContent = levelName(score); }
+  var lastMilestone = LS.get('milestone', 0);
+  function addScore(pts){
+    if(!pts) return;
+    score += pts; LS.set('score', score); paintTrophy();
+    [60,150,280,420,500].forEach(function(m){
+      if(score>=m && lastMilestone<m){ lastMilestone=m; LS.set('milestone',m); if(!reduce) celebrate(); }
+    });
+  }
+  paintTrophy();
+
+  /* ---------- who's playing ---------- */
+  var current = LS.get('who','');
+  document.querySelectorAll('.who-btn').forEach(function(b){
+    if(b.dataset.boy===current) b.classList.add('on');
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.who-btn').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); current=b.dataset.boy; LS.set('who',current);
+    });
+  });
+
+  /* ---------- generic quiz engine ---------- */
+  function buildQuiz(root, data, ptsRight){
+    var qEl=root.querySelector('.q'), optsEl=root.querySelector('.opts'),
+        fbEl=root.querySelector('.feedback'), nextBtn=root.querySelector('.next'),
+        dotsEl=root.querySelector('.progress-dots');
+    var idx=0, answered=false;
+    dotsEl.innerHTML = data.map(function(){return '<span class="pdot"></span>';}).join('');
+    var dots = dotsEl.querySelectorAll('.pdot');
+    function render(){
+      answered=false; var item=data[idx];
+      qEl.textContent=item.q; fbEl.textContent=''; fbEl.className='feedback'; nextBtn.style.display='none';
+      optsEl.innerHTML='';
+      item.a.forEach(function(opt,i){
+        var btn=document.createElement('button'); btn.className='opt'; btn.textContent=opt;
+        btn.addEventListener('click',function(){ pick(i,btn); });
+        optsEl.appendChild(btn);
+      });
+    }
+    function pick(i,btn){
+      if(answered) return; answered=true;
+      var item=data[idx], buttons=optsEl.querySelectorAll('.opt');
+      buttons.forEach(function(b){ b.disabled=true; });
+      if(i===item.c){
+        btn.classList.add('right'); fbEl.textContent='✓ '+(item.why||'Yes!'); fbEl.className='feedback good';
+        dots[idx].classList.add('done'); addScore(ptsRight);
+      } else {
+        btn.classList.add('wrong'); buttons[item.c].classList.add('right');
+        fbEl.textContent='Good try. '+(item.why||''); fbEl.className='feedback try';
+        dots[idx].classList.add('miss');
+      }
+      if(idx<data.length-1){ nextBtn.style.display='inline-block'; }
+      else { nextBtn.style.display='inline-block'; nextBtn.textContent='Play again ↺'; }
+    }
+    nextBtn.addEventListener('click',function(){
+      idx = (idx+1) % data.length;
+      if(idx===0){ dots.forEach(function(d){ d.className='pdot'; }); nextBtn.textContent='Next →'; }
+      render();
+    });
+    render();
+  }
+
+  /* ---------- 1. World Cup ---------- */
+  buildQuiz(document.querySelector('[data-game="worldcup"] [data-quiz]'),[
+    {q:'How did USA do in the very first game, against Paraguay?', a:['Lost 1-0','Won 4-1','Tied 2-2'], c:1, why:'USA won 4-1 in Los Angeles. A huge start!'},
+    {q:'USA beat Australia 2-0 and won their whole group. What group was it?', a:['Group A','Group D','Group Z'], c:1, why:'Group D, won with a game to spare.'},
+    {q:'Who does USA play next, in the Round of 32 on July 1?', a:['Brazil','Bosnia and Herzegovina','Canada'], c:1, why:'Bosnia and Herzegovina, at Levi’s Stadium.'},
+    {q:'The last time the USA hosted a World Cup was a long time ago. When?', a:['1994','2010','Last year'], c:0, why:'1994! This is the first home World Cup since then.'},
+    {q:'How many teams are in the 2026 World Cup, the biggest ever?', a:['16','32','48'], c:2, why:'48 teams, hosted by USA, Canada, and Mexico.'}
+  ], 10);
+
+  /* ---------- 2. Pokémon memory ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="pokemon"]');
+    var grid=root.querySelector('[data-memo]'), fb=root.querySelector('.feedback'),
+        scoreEl=root.querySelector('[data-memo-score]'), resetBtn=root.querySelector('[data-memo-reset]');
+    var fossils=['🦖','🦕','🐚','🦂','🦅','🐉','🦴','🥚'];
+    var first=null, lock=false, pairs=0, awarded=false;
+    function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor((i+1)*((Date.now()*(i+7))%1000)/1000); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+    function deal(){
+      pairs=0; awarded=false; first=null; lock=false; fb.textContent=''; fb.className='feedback';
+      scoreEl.textContent='0 pairs';
+      var deck=shuffle(fossils.concat(fossils.slice()));
+      grid.innerHTML='';
+      deck.forEach(function(sym){
+        var c=document.createElement('button'); c.className='card'; c.textContent=sym; c.dataset.sym=sym;
+        c.addEventListener('click',function(){ flip(c); });
+        grid.appendChild(c);
+      });
+    }
+    function flip(c){
+      if(lock||c.classList.contains('up')||c.classList.contains('matched')) return;
+      c.classList.add('up');
+      if(!first){ first=c; return; }
+      if(first.dataset.sym===c.dataset.sym){
+        first.classList.add('matched'); c.classList.add('matched'); first=null; pairs++;
+        scoreEl.textContent=pairs+' pairs'; addScore(8);
+        if(pairs===fossils.length && !awarded){ awarded=true; fb.textContent='🎉 All matched! Great teamwork.'; fb.className='feedback good'; addScore(20); if(!reduce) celebrate(); }
+      } else {
+        lock=true; var a=first, b=c;
+        setTimeout(function(){ a.classList.remove('up'); b.classList.remove('up'); first=null; lock=false; }, 750);
+      }
+    }
+    resetBtn.addEventListener('click',deal);
+    deal();
+  })();
+
+  /* ---------- 3. Minecraft potion ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="minecraft"]');
+    var track=root.querySelector('[data-track]'), box=root.querySelector('[data-ingredients]'), fb=root.querySelector('.feedback');
+    var recipe=[
+      {id:'water', em:'💧', name:'Water Bottle'},
+      {id:'eye', em:'🕷️', name:'Fermented Spider Eye'},
+      {id:'apple', em:'🍎', name:'Golden Apple'}
+    ];
+    var distract=[{id:'wart',em:'🌑',name:'Nether Wart'},{id:'sugar',em:'🍬',name:'Sugar'},{id:'gunpowder',em:'💥',name:'Gunpowder'}];
+    var step=0, done=false;
+    function render(){
+      step=0; done=false; track.innerHTML='<em style="color:rgba(31,26,36,.5);font-size:13px">Tap ingredients in the right order…</em>';
+      fb.textContent=''; fb.className='feedback';
+      var all=recipe.concat(distract);
+      for(var i=all.length-1;i>0;i--){ var j=Math.floor((i+1)*((Date.now()*(i+3))%997)/997); var t=all[i];all[i]=all[j];all[j]=t; }
+      box.innerHTML='';
+      all.forEach(function(ing){
+        var b=document.createElement('button'); b.className='ingredient'; b.innerHTML='<span class="em">'+ing.em+'</span>'+ing.name;
+        b.addEventListener('click',function(){ tap(ing,b); });
+        box.appendChild(b);
+      });
+    }
+    function tap(ing,b){
+      if(done) return;
+      if(ing.id===recipe[step].id){
+        if(step===0) track.innerHTML='';
+        var chip=document.createElement('span'); chip.className='brew-step'; chip.textContent=ing.em+' '+ing.name; track.appendChild(chip);
+        b.classList.add('used'); b.disabled=true; step++;
+        if(step===recipe.length){ done=true; fb.textContent='🧪 Villager cured! You followed the whole recipe.'; fb.className='feedback good'; addScore(25); if(!reduce) celebrate(); }
+      } else {
+        fb.textContent='Not next. The order is water, then spider eye, then golden apple. Try again!'; fb.className='feedback try';
+        setTimeout(render, 900);
+      }
+    }
+    render();
+  })();
+
+  /* ---------- 4. Norwegian ---------- */
+  buildQuiz(document.querySelector('[data-game="norsk"] [data-quiz]'),[
+    {q:'In Norwegian, what does "Takk" mean?', a:['Hello','Thank you','Goodbye'], c:1, why:'Takk = thank you. Try "tusen takk" = a thousand thanks!'},
+    {q:'How do you say "Hi" in Norwegian?', a:['Hei','Ja','Hund'], c:0, why:'Hei! (sounds like "hay")'},
+    {q:'What does "venn" mean?', a:['Friend','Water','Dog'], c:0, why:'Venn = friend. You three are best venner.'},
+    {q:'Stoughton celebrates "Syttende Mai" every May 17. What is it?', a:['A pizza day','Norway’s Constitution Day','A soccer match'], c:1, why:'Norway’s big national day. Stoughton throws a huge festival!'},
+    {q:'What does "hund" mean in Norwegian?', a:['House','Dog','Hundred'], c:1, why:'Hund = dog. (Tricky, it sounds like "hundred"!)'}
+  ], 10);
+
+  /* ---------- 5. Stoughton ---------- */
+  buildQuiz(document.querySelector('[data-game="stoughton"] [data-quiz]'),[
+    {q:'Stoughton, Wisconsin is famous for being very what?', a:['Norwegian','Hawaiian','Egyptian'], c:0, why:'It’s called the most Norwegian town in Wisconsin!'},
+    {q:'Stoughton sits on a river. Which one?', a:['The Nile','The Yahara River','The Amazon'], c:1, why:'The Yahara River runs right through town.'},
+    {q:'Legend says Stoughton is the birthplace of a famous work break. Which?', a:['The coffee break','The nap','Recess'], c:0, why:'Local legend says the coffee break was born here. Tusen takk, Stoughton!'},
+    {q:'Stoughton is very close to which bigger Wisconsin city?', a:['Madison','Tokyo','Miami'], c:0, why:'Madison, the state capital, is just up the road.'},
+    {q:'What big colorful festival fills Stoughton’s streets each May?', a:['Syttende Mai','The Super Bowl','Comic-Con'], c:0, why:'Syttende Mai, the Norwegian heritage festival.'}
+  ], 10);
+
+  /* ---------- 6. Math score lab ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="math"]');
+    var qEl=root.querySelector('.q'), optsEl=root.querySelector('.opts'), fb=root.querySelector('.feedback'),
+        nextBtn=root.querySelector('.next'), streakEl=root.querySelector('[data-math-streak]');
+    var streak=0, answered=false, seed=7;
+    function rnd(n){ seed=(seed*9301+49297)%233280; return Math.floor(seed/233280*n); }
+    var templates=[
+      function(){ var a=rnd(5)+1,b=rnd(5)+1; return {t:'USA scored '+a+' goals in one game and '+b+' in the next. How many goals total?', ans:a+b}; },
+      function(){ var a=rnd(6)+4,b=rnd(4)+1; return {t:'A T. rex had '+a+' teeth on top and '+b+' fell out. How many are left on top?', ans:a-b}; },
+      function(){ var a=rnd(4)+2; return {t:'Each of the 3 boys catches '+a+' Pokémon. How many caught all together?', ans:a*3}; },
+      function(){ var a=rnd(5)+2,b=rnd(5)+2; return {t:'Minecraft: you mine '+a+' diamonds, then '+b+' more. How many diamonds?', ans:a+b}; },
+      function(){ var a=(rnd(4)+1)*2; return {t:'The parade float carries '+a+' flags. Half are rainbow. How many rainbow flags?', ans:a/2}; }
+    ];
+    function newQ(){
+      answered=false; fb.textContent=''; fb.className='feedback'; nextBtn.style.display='none';
+      var item=templates[rnd(templates.length)](); qEl.textContent=item.t;
+      var correct=item.ans, opts=[correct];
+      while(opts.length<3){ var d=correct+(rnd(5)-2); if(d>=0 && opts.indexOf(d)<0) opts.push(d); }
+      for(var i=opts.length-1;i>0;i--){ var j=rnd(i+1); var t=opts[i];opts[i]=opts[j];opts[j]=t; }
+      optsEl.innerHTML='';
+      opts.forEach(function(v){
+        var b=document.createElement('button'); b.className='opt'; b.textContent=v;
+        b.addEventListener('click',function(){ pick(v,correct,b); });
+        optsEl.appendChild(b);
+      });
+    }
+    function pick(v,correct,btn){
+      if(answered) return; answered=true;
+      optsEl.querySelectorAll('.opt').forEach(function(b){ b.disabled=true; if(parseInt(b.textContent,10)===correct) b.classList.add('right'); });
+      if(v===correct){ streak++; fb.textContent='✓ Correct! Streak '+streak; fb.className='feedback good'; addScore(7+ (streak>2?3:0)); }
+      else { btn.classList.add('wrong'); streak=0; fb.textContent='Close! The answer was '+correct+'.'; fb.className='feedback try'; }
+      streakEl.textContent='Streak: '+streak; nextBtn.style.display='inline-block';
+    }
+    nextBtn.addEventListener('click',newQ);
+    newQ();
+  })();
+
+  /* ---------- 7. Listen & Echo ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="listen"]');
+    var pads=root.querySelectorAll('.pad'), startBtn=root.querySelector('[data-echo-start]'),
+        fb=root.querySelector('.feedback'), levelEl=root.querySelector('[data-echo-level]');
+    var seq=[], pos=0, playing=false, level=0;
+    var keys=['james','henry','oscar'], seed2=13;
+    function rnd(n){ seed2=(seed2*9301+49297)%233280; return Math.floor(seed2/233280*n); }
+    function flash(key){ var pad=root.querySelector('.pad[data-p="'+key+'"]'); pad.classList.add('flash'); setTimeout(function(){ pad.classList.remove('flash'); }, 380); }
+    function playSeq(){
+      playing=true; fb.textContent='Watch and listen…'; fb.className='feedback'; var i=0;
+      var iv=setInterval(function(){
+        if(i>=seq.length){ clearInterval(iv); playing=false; pos=0; fb.textContent='Now tap it back!'; return; }
+        flash(seq[i]); i++;
+      }, 620);
+    }
+    function next(){ seq.push(keys[rnd(3)]); level=seq.length; levelEl.textContent='Level '+level; playSeq(); }
+    startBtn.addEventListener('click',function(){ seq=[]; level=0; next(); });
+    pads.forEach(function(pad){
+      pad.addEventListener('click',function(){
+        if(playing||seq.length===0) return;
+        flash(pad.dataset.p);
+        if(pad.dataset.p===seq[pos]){
+          pos++;
+          if(pos===seq.length){ fb.textContent='✓ Perfect echo! Here comes a longer one.'; fb.className='feedback good'; addScore(6+level*2); setTimeout(next, 900); }
+        } else {
+          fb.textContent='Oops! The pattern broke. Press Start to try a new one.'; fb.className='feedback try'; seq=[]; pos=0; levelEl.textContent='Level 0';
+        }
+      });
+    });
+  })();
+
+  /* ---------- 8. Team Quest ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="quest"]');
+    var tagEl=root.querySelector('[data-quest-tag]'), textEl=root.querySelector('[data-quest-text]'),
+        doneBtn=root.querySelector('[data-quest-done]'), skipBtn=root.querySelector('[data-quest-skip]'), fb=root.querySelector('.feedback');
+    var quests=[
+      {tag:'Active Listening', t:'Ask Uncle Gordon: "What was the loudest moment at the World Cup game?" Then each of you repeat back one thing he said.'},
+      {tag:'Collaboration', t:'At the Minecraft Experience, give each brother one job: one reads the clue, one gathers, one crafts. Switch jobs in the next room.'},
+      {tag:'Curiosity', t:'Find one real fossil at the Field Museum that is older than 100 million years. Tell each other how old it is.'},
+      {tag:'Kindness', t:'At the Pride parade, count how many people you can wave back to. Try to beat 20 together.'},
+      {tag:'Active Listening', t:'At dinner, ask Crystal or Eric one question about when THEY were 8 years old. Listen for the surprising part.'},
+      {tag:'Curiosity', t:'Learn one new Norwegian word from a grown-up and teach it to your two brothers before bed.'},
+      {tag:'Collaboration', t:'Build one thing in Gordtopia tonight that all three of you worked on. Decide together what it is BEFORE you start.'},
+      {tag:'Curiosity', t:'Ask Uncle Gordon why this World Cup is special to him. He has been waiting 50 years. Listen to the whole answer.'},
+      {tag:'Kindness', t:'Pick one thing you are proud of about EACH brother and say it out loud at breakfast.'}
+    ];
+    var qi = LS.get('questi', 0) % quests.length;
+    function show(){ var q=quests[qi]; tagEl.textContent=q.tag; textEl.textContent=q.t; fb.textContent=''; fb.className='feedback'; }
+    doneBtn.addEventListener('click',function(){ fb.textContent='🌟 Mission complete! +15 to the team.'; fb.className='feedback good'; addScore(15); qi=(qi+1)%quests.length; LS.set('questi',qi); setTimeout(show, 1100); });
+    skipBtn.addEventListener('click',function(){ qi=(qi+1)%quests.length; LS.set('questi',qi); show(); });
+    show();
+  })();
+
+  /* ---------- 9. Uncle G Joy Jar ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="uncle"]');
+    var tagEl=root.querySelector('[data-joy-tag]'), textEl=root.querySelector('[data-joy-text]'), btn=root.querySelector('[data-joy-next]');
+    var joys=[
+      {tag:'Did you know?', t:'Uncle Gordon flew in from Los Angeles, almost 2,000 miles away, just to be with you this weekend.'},
+      {tag:'Kindness mission', t:'Give Uncle Gordon the biggest group hug the three of you can make. Count to three first.'},
+      {tag:'Did you know?', t:'Gordon has loved soccer for 50 years. That is longer than your mom and dad have been alive!'},
+      {tag:'Joy mission', t:'Teach Uncle Gordon one thing about Minecraft he does not know. Anything counts.'},
+      {tag:'Did you know?', t:'"Wiscago" means Wisconsin + Chicago. It is the name for YOUR family’s special weekend.'},
+      {tag:'Kindness mission', t:'Tell Uncle Gordon one thing you are excited to show him this weekend.'},
+      {tag:'Joy mission', t:'Find a rainbow at the parade and point it out so the whole family sees it.'},
+      {tag:'Did you know?', t:'The Pride parade has been happening in Chicago for 55 years. You are part of something big.'}
+    ];
+    var ji = LS.get('joyi', 0) % joys.length;
+    btn.addEventListener('click',function(){ var j=joys[ji]; tagEl.textContent=j.tag; textEl.textContent=j.t; addScore(5); ji=(ji+1)%joys.length; LS.set('joyi',ji); });
+  })();
+
+  /* ---------- confetti ---------- */
+  function celebrate(){
+    var c=document.createElement('canvas'); c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:200';
+    document.body.appendChild(c); var x=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight;
+    var cols=['#7B1F2F','#C0392B','#27AE60','#E67E22','#2980B9','#E8A93E','#B83A6B'], P=[];
+    for(var i=0;i<(innerWidth<600?80:160);i++)
+      P.push({x:innerWidth/2,y:innerHeight*0.28,vx:(Math.random()-.5)*13,vy:Math.random()*-15-3,c:cols[i%cols.length],r:Math.random()*6+3,a:1});
+    (function f(){
+      x.clearRect(0,0,c.width,c.height); var live=false;
+      P.forEach(function(p){ p.vy+=.4; p.x+=p.vx; p.y+=p.vy; p.a-=.011;
+        if(p.a>0){ live=true; x.globalAlpha=Math.max(p.a,0); x.fillStyle=p.c; x.fillRect(p.x,p.y,p.r,p.r); } });
+      live?requestAnimationFrame(f):c.remove();
+    })();
+  }
+})();
+</script>
+
+</body>
+</html>
