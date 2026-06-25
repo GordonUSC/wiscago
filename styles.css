@@ -11,6 +11,12 @@
   --sage: #7BA08A;
   --skyblue: #5BB0D6;
   --berry: #B83A6B;
+  /* Henry's colors */
+  --henry-red: #C0392B;
+  --henry-green: #27AE60;
+  /* Oscar's colors */
+  --oscar-orange: #E67E22;
+  --oscar-blue: #2980B9;
   --rule: rgba(31, 26, 36, 0.12);
   --shadow: 0 14px 40px rgba(31, 26, 36, 0.12);
 }
@@ -353,8 +359,12 @@ footer.site .made {
   border-top: 8px solid var(--burgundy);
 }
 .boy-card.james { border-top-color: var(--burgundy); }
-.boy-card.henry { border-top-color: var(--teal); }
-.boy-card.oscar { border-top-color: var(--gold); }
+.boy-card.henry { border-top: 8px solid var(--henry-red); border-bottom: 3px solid var(--henry-green); }
+.boy-card.henry h3 { color: var(--henry-red); }
+.boy-card.henry .label { color: var(--henry-green); }
+.boy-card.oscar { border-top: 8px solid var(--oscar-orange); border-bottom: 3px solid var(--oscar-blue); }
+.boy-card.oscar h3 { color: var(--oscar-orange); }
+.boy-card.oscar .label { color: var(--oscar-blue); }
 .boy-card h3 {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 38px;
@@ -685,6 +695,13 @@ nav.primary a:active { transform: translateY(1px); }
 .badge-btn.got { border-style:solid; background:var(--gold); color:var(--ink); }
 .badge-btn.got .check{ font-weight:900; }
 .badge-note{ font-size:13px; color:rgba(31,26,36,0.6); margin-top:14px; }
+
+/* Boys crew color swatches */
+.color-crew { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.crew-swatch { padding:6px 16px; border-radius:100px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.5px; }
+.james-swatch { background:var(--burgundy); color:#fff; }
+.henry-swatch { background:linear-gradient(135deg, var(--henry-red) 50%, var(--henry-green) 50%); color:#fff; }
+.oscar-swatch { background:linear-gradient(135deg, var(--oscar-orange) 50%, var(--oscar-blue) 50%); color:#fff; }
 
 /* ===== Tickets-secured microcopy ===== */
 .ticket-note { color: var(--sage); font-weight: 700; }
