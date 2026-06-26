@@ -48,6 +48,14 @@
   .heart:hover{ transform:translateY(-3px) scale(1.08); filter:none; }
   .heart.on{ filter:none; transform:scale(1.14); }
   .heart-cap{ margin-top:12px; font-size:14px; font-weight:700; letter-spacing:.04em; color:var(--burgundy); min-height:20px; }
+  .share-btn{ appearance:none; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; margin-top:12px;
+    border-radius:999px; padding:9px 18px; border:2px solid var(--burgundy); background:transparent; color:var(--burgundy);
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s, background .2s, color .2s; }
+  .share-btn:hover{ transform:translateY(-2px); background:var(--burgundy); color:var(--cream); }
+  .share-toast{ position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); opacity:0;
+    background:var(--ink); color:var(--cream); padding:11px 20px; border-radius:999px; font-weight:700; font-size:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25); z-index:300; transition:opacity .25s, transform .25s; pointer-events:none; }
+  .share-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -255,6 +263,7 @@
     <div>
       <div class="made">Made with love for the family · June 2026</div>
       <div class="signature">See you in Chicago</div>
+      <button class="share-btn" id="shareBtn" type="button">🔗 Share Wiscago</button>
     </div>
     <div>Gordon Bellamy · Eric, Crystal, James, Henry &amp; Oscar Francksen</div>
   </div>
@@ -376,6 +385,23 @@ document.body.classList.add('js');
     save(); nameEl.value=''; textEl.value=''; render();
   });
   render();
+})();
+
+/* Share button: Web Share API with clipboard fallback */
+(function(){
+  var btn=document.getElementById('shareBtn'); if(!btn) return;
+  var toast;
+  function showToast(msg){
+    if(!toast){ toast=document.createElement('div'); toast.className='share-toast'; document.body.appendChild(toast); }
+    toast.textContent=msg; toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 1900);
+  }
+  btn.addEventListener('click',function(){
+    var data={ title:'Wiscago: A Pride Weekend Together', text:'Six hearts. One weekend. June 26 to 28 in Chicago.', url:location.href };
+    if(navigator.share){ navigator.share(data).catch(function(){}); }
+    else if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(location.href).then(function(){ showToast('Link copied'); }).catch(function(){ showToast(location.href); }); }
+    else { showToast(location.href); }
+  });
 })();
 
 /* Interactive six hearts in the hero */
