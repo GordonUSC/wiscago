@@ -51,6 +51,18 @@
   .c-listen .cab__top{ background:linear-gradient(135deg,#7B1F2F,#E67E22); }
   .c-quest .cab__top{ background:linear-gradient(135deg,#8E44AD,#2980B9); }
   .c-uncle .cab__top{ background:linear-gradient(135deg,#E8A93E,#B83A6B); }
+  .c-bingo .cab__top{ background:linear-gradient(135deg,#E63946,#5BB0D6); }
+
+  /* parade bingo */
+  .bingo3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .bcell{ appearance:none; border:2px solid var(--rule); background:var(--cream); border-radius:12px; padding:8px 6px;
+    min-height:74px; font-family:'Inter',sans-serif; font-weight:700; font-size:12px; line-height:1.2; cursor:pointer; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; text-align:center; transition:transform .1s, background .15s, border-color .15s; }
+  .bcell .be{ font-size:22px; }
+  .bcell:hover{ transform:translateY(-2px); }
+  .bcell.hit{ background:linear-gradient(135deg,#B83A6B,#7b1f47); color:#fff; border-color:transparent; }
+  .bcell.free{ background:rgba(232,169,62,.2); border-style:dashed; }
+  .bcell.free.hit{ background:linear-gradient(135deg,#E8A93E,#c0851f); color:var(--ink); }
 
   .q{ font-weight:700; font-size:16px; margin-bottom:12px; min-height:46px; }
   .opts{ display:grid; gap:8px; }
@@ -138,7 +150,7 @@
   <div class="wrap">
     <div class="eyebrow">Just for James, Henry &amp; Oscar</div>
     <h1 class="display">The <span class="accent">Wiscago</span> <span style="color:var(--oscar-orange)">Arcade</span>.</h1>
-    <p class="lede" style="margin-top:18px; max-width:640px; margin-left:auto; margin-right:auto;">Nine little games to play all weekend long, on your own device or passing it around. Here is the secret: <strong>you all win together.</strong> Every point any of you earns goes into one big Team Trophy. Help each other, get curious, and listen close.</p>
+    <p class="lede" style="margin-top:18px; max-width:640px; margin-left:auto; margin-right:auto;">Ten little games to play all weekend long, on your own device or passing it around. Here is the secret: <strong>you all win together.</strong> Every point any of you earns goes into one big Team Trophy. Help each other, get curious, and listen close.</p>
 
     <div class="who" id="whoRow">
       <button class="who-btn" data-boy="james"><span class="em">🦁</span>James</button>
@@ -317,6 +329,23 @@
           </div>
           <div class="quest-actions">
             <button class="mini-btn" data-joy-next>✨ Open the jar (+5)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. PARADE BINGO -->
+      <div class="cab c-bingo" data-game="bingo">
+        <div class="cab__top">
+          <h3>🏳️‍🌈 Parade Bingo</h3>
+          <div class="sub">Sunday at the parade: tap a square each time you spot one for real.</div>
+          <span class="cab__skill">Spot it together</span>
+        </div>
+        <div class="cab__body" data-bingo>
+          <div class="bingo3" data-bingo-grid></div>
+          <div class="feedback"></div>
+          <div class="cab__foot">
+            <span class="scoreline" data-bingo-score>0 spotted</span>
+            <button class="mini-btn" data-bingo-reset>Fresh card</button>
           </div>
         </div>
       </div>
@@ -623,6 +652,54 @@ document.body.classList.add('js');
     ];
     var ji = LS.get('joyi', 0) % joys.length;
     btn.addEventListener('click',function(){ var j=joys[ji]; tagEl.textContent=j.tag; textEl.textContent=j.t; addScore(5); ji=(ji+1)%joys.length; LS.set('joyi',ji); });
+  })();
+
+  /* ---------- 10. Parade Bingo ---------- */
+  (function(){
+    var root=document.querySelector('[data-game="bingo"]');
+    var grid=root.querySelector('[data-bingo-grid]'), fb=root.querySelector('.feedback'),
+        scoreEl=root.querySelector('[data-bingo-score]'), resetBtn=root.querySelector('[data-bingo-reset]');
+    var cells=[
+      {e:'🏳️‍🌈',t:'Rainbow flag'},{e:'🥁',t:'A drumline'},{e:'💃',t:'Someone dancing'},
+      {e:'🎈',t:'Balloons'},{e:'⭐',t:'FREE: Eric’s first Pride'},{e:'🐕',t:'A dog in costume'},
+      {e:'📣',t:'A great chant'},{e:'💌',t:'A sign you love'},{e:'👑',t:'A drag queen'}
+    ];
+    var FREE=4;
+    var LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    var state=LS.get('bingo', null);
+    if(!state || typeof state!=='object'){ state={}; }
+    state[FREE]=true;
+    var hadBingo=false;
+    function spotted(){ var n=0; for(var k in state){ if(state[k]) n++; } return n; }
+    function isBingo(){ return LINES.some(function(ln){ return ln.every(function(ix){ return state[ix]; }); }); }
+    function paint(){
+      var n=spotted(); scoreEl.textContent=(n-1)+' spotted';
+      var b=isBingo();
+      if(b){ fb.textContent='🌈 BINGO! Nicely spotted, team.'; fb.className='feedback good'; }
+      else { fb.textContent=''; fb.className='feedback'; }
+      if(b && !hadBingo){ hadBingo=true; addScore(25); if(!reduce) celebrate(); }
+      if(!b) hadBingo=false;
+    }
+    function render(){
+      grid.innerHTML='';
+      cells.forEach(function(c,ix){
+        var btn=document.createElement('button');
+        btn.className='bcell'+(ix===FREE?' free':'')+(state[ix]?' hit':'');
+        btn.innerHTML='<span class="be">'+c.e+'</span>'+c.t;
+        btn.addEventListener('click',function(){
+          if(ix===FREE) return;
+          var turningOn=!state[ix];
+          state[ix]=turningOn; btn.classList.toggle('hit');
+          LS.set('bingo', state);
+          if(turningOn) addScore(4);
+          paint();
+        });
+        grid.appendChild(btn);
+      });
+      paint();
+    }
+    resetBtn.addEventListener('click',function(){ state={}; state[FREE]=true; hadBingo=false; LS.set('bingo', state); render(); });
+    render();
   })();
 
   /* ---------- confetti ---------- */
