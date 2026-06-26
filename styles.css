@@ -780,3 +780,12 @@ nav.primary a:active { transform: translateY(1px); }
 @media (max-width: 760px) {
   .thread-pair { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   A11Y (2026-06-25) — skip link + main landmark for keyboard
+   and screen-reader users.
+   ============================================================ */
+.skip-link{ position:absolute; left:-9999px; top:0; z-index:100;
+  background:var(--burgundy); color:var(--cream); padding:10px 18px;
+  border-radius:0 0 10px 0; font-weight:700; font-size:14px; }
+.skip-link:focus{ left:0; outline:3px solid var(--gold); outline-offset:0; }
