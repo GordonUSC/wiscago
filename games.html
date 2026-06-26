@@ -666,7 +666,9 @@ document.body.classList.add('js');
       {tag:'Did you know?', t:'"Wiscago" means Wisconsin + Chicago. It is the name for YOUR family’s special weekend.'},
       {tag:'Kindness mission', t:'Tell Uncle Gordon one thing you are excited to show him this weekend.'},
       {tag:'Joy mission', t:'Find a rainbow at the parade and point it out so the whole family sees it.'},
-      {tag:'Did you know?', t:'The Pride parade has been happening in Chicago for 55 years. You are part of something big.'}
+      {tag:'Did you know?', t:'The Pride parade has been happening in Chicago for 55 years. You are part of something big.'},
+      {tag:'Did you know?', t:'Your hotel, the Palmer House, is where the very first brownie was invented, back in 1893 for the World’s Fair. Ask a grown-up if you can try the original recipe!'},
+      {tag:'Joy mission', t:'At the Palmer House, look straight up in the lobby. The whole ceiling is a giant hand-painted picture. Find one thing in it nobody else spots.'}
     ];
     var ji = LS.get('joyi', 0) % joys.length;
     btn.addEventListener('click',function(){ var j=joys[ji]; tagEl.textContent=j.tag; textEl.textContent=j.t; addScore(5); ji=(ji+1)%joys.length; LS.set('joyi',ji); });
