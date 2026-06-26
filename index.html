@@ -21,6 +21,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<style>
+  .notebox{ margin-top:22px; display:grid; gap:12px; max-width:560px; }
+  .note-input, .note-area{ font-family:'Inter',sans-serif; font-size:16px; color:var(--ink); background:var(--paper);
+    border:1px solid var(--rule); border-radius:12px; padding:12px 16px; width:100%; }
+  .note-area{ min-height:96px; resize:vertical; line-height:1.5; }
+  .note-input:focus, .note-area:focus{ outline:none; border-color:var(--burgundy); }
+  .note-btn{ justify-self:start; appearance:none; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;
+    border-radius:999px; padding:11px 22px; border:2px solid var(--burgundy); background:var(--burgundy); color:var(--cream);
+    transition:transform .15s, box-shadow .2s; }
+  .note-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(123,31,47,.25); }
+  .notewall{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-top:26px; }
+  .note-card{ background:var(--paper); border-radius:14px; padding:18px 20px; box-shadow:0 4px 16px rgba(31,26,36,.06);
+    border-left:4px solid var(--gold); position:relative; }
+  .note-card:nth-child(4n+2){ border-left-color:var(--berry); }
+  .note-card:nth-child(4n+3){ border-left-color:var(--sage); }
+  .note-card:nth-child(4n+4){ border-left-color:var(--skyblue); }
+  .note-card .nt{ font-size:15px; line-height:1.5; color:var(--ink); white-space:pre-wrap; word-break:break-word; }
+  .note-card .nn{ font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--burgundy); margin-top:12px; }
+  .note-del{ position:absolute; top:10px; right:12px; border:none; background:none; cursor:pointer; color:rgba(31,26,36,.35); font-size:18px; line-height:1; }
+  .note-del:hover{ color:var(--vermilion); }
+  .note-empty{ font-size:14px; color:rgba(31,26,36,.55); margin-top:20px; font-style:italic; }
+</style>
 </head>
 <body>
 
@@ -72,6 +94,20 @@
       <p>Eric has stood in a lot of big rooms. He has never stood on a Pride parade route. This is the one. His first, in Chicago, with Crystal beside him and Gordon beside them both.</p>
       <p>Gordon said it plainly: of everything on the calendar this year, June 28 is the day he is holding closest of all. The boys will remember the floats. The grown-ups will remember this.</p>
     </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap reveal">
+    <div class="eyebrow">Leave your mark</div>
+    <h2 class="display">Notes for Eric's first Pride.</h2>
+    <p class="lede" style="margin-top:14px;">Pin a note for the weekend. A wish, a memory, a reason you are proud. They save right here on this page for the family to read.</p>
+    <div class="notebox">
+      <input id="noteName" class="note-input" type="text" maxlength="24" placeholder="Your name (optional)" aria-label="Your name">
+      <textarea id="noteText" class="note-area" maxlength="220" placeholder="Write something for Eric, or for the whole crew…" aria-label="Your note"></textarea>
+      <button id="noteAdd" class="note-btn">Pin it to the board</button>
+    </div>
+    <div class="notewall" id="noteWall"></div>
   </div>
 </section>
 
@@ -286,6 +322,40 @@ document.body.classList.add('js');
       live ? requestAnimationFrame(f) : c.remove();
     })();
   }
+})();
+</script>
+
+<script>
+/* Note wall for Eric's first Pride — localStorage, XSS-safe via textContent */
+(function(){
+  var KEY='wiscago-notes';
+  var wall=document.getElementById('noteWall'), nameEl=document.getElementById('noteName'),
+      textEl=document.getElementById('noteText'), addBtn=document.getElementById('noteAdd');
+  if(!wall) return;
+  var notes;
+  try{ notes=JSON.parse(localStorage.getItem(KEY)); }catch(e){ notes=null; }
+  if(!Array.isArray(notes)){
+    notes=[{n:'Uncle G', t:'Eric, I have waited a long time to stand on a parade route next to you. June 28, here we go. Love you, brother.'}];
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(notes)); }catch(e){} }
+  function render(){
+    wall.innerHTML='';
+    if(!notes.length){ var e=document.createElement('div'); e.className='note-empty'; e.textContent='No notes yet. Be the first to pin one.'; wall.appendChild(e); return; }
+    notes.forEach(function(note, i){
+      var card=document.createElement('div'); card.className='note-card';
+      var del=document.createElement('button'); del.className='note-del'; del.setAttribute('aria-label','Remove note'); del.textContent='×';
+      del.addEventListener('click',function(){ notes.splice(i,1); save(); render(); });
+      var p=document.createElement('div'); p.className='nt'; p.textContent=note.t;
+      var nm=document.createElement('div'); nm.className='nn'; nm.textContent='— '+(note.n||'Anonymous');
+      card.appendChild(del); card.appendChild(p); card.appendChild(nm); wall.appendChild(card);
+    });
+  }
+  addBtn.addEventListener('click',function(){
+    var t=(textEl.value||'').trim(); if(!t){ textEl.focus(); return; }
+    notes.unshift({ n:(nameEl.value||'').trim().slice(0,24), t:t.slice(0,220) });
+    save(); nameEl.value=''; textEl.value=''; render();
+  });
+  render();
 })();
 </script>
 
